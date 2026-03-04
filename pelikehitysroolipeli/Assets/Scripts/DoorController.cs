@@ -1,8 +1,25 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static DoorController;
 
 public class DoorController : MonoBehaviour
 {
+    public enum Oventila
+    {
+        auki,
+        kiinni,
+        lukossa
+    }
+
+    public enum Toiminto
+    {
+        avaa,
+        sulje,
+        lukitse,
+        avaalukko
+    }
+
     // Kuvat oven eri tiloille
     [SerializeField]
     Sprite ClosedDoorSprite;
@@ -28,9 +45,14 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     int DebugFontSize = 32;
 
+    [SerializeField]
+    Oventila ovenTila;
+
+
 
     void Start()
     {
+        ovenTila = Oventila.lukossa;
         doorSprite = GetComponent<SpriteRenderer>();
         colliderComp = GetComponent<BoxCollider2D>();
         SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
@@ -51,9 +73,34 @@ public class DoorController : MonoBehaviour
     /// <summary>
     /// Oveen kohdistuu jokin toiminto joka muuttaa sen tilaa
     /// </summary>
-    public void ReceiveAction()
+    public void ReceiveAction(Toiminto toiminto)
     {
-        
+        switch (toiminto)
+        {
+            case Toiminto.sulje when ovenTila == Oventila.auki:
+                ovenTila = Oventila.kiinni;
+                doorSprite.sprite = ClosedDoorSprite;
+                break;
+
+            case Toiminto.avaa when ovenTila == Oventila.kiinni:
+                ovenTila = Oventila.auki;
+                doorSprite.sprite = OpenDoorSprite;
+                break;
+
+            case Toiminto.lukitse when ovenTila == Oventila.kiinni:
+                ovenTila = Oventila.lukossa;
+                lockSprite.sprite = LockedSprite;
+                break;
+
+            case Toiminto.avaalukko when ovenTila == Oventila.lukossa:
+                ovenTila = Oventila.kiinni;
+                lockSprite.sprite = UnlockedSprite;
+                break;
+
+            default:
+                Console.WriteLine("Virhe");
+                break;
+        }
     }
 
     // Kun tulee toiminto, sen perusteella kutsutaan jotakin
