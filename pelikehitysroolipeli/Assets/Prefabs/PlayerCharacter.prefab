@@ -70,7 +70,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0109846, y: -0.054921806}
+  m_Offset: {x: 0.0044124126, y: 0.4685801}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -80,7 +80,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.8567809, y: 1.549218}
+  m_Size: {x: 0.97401285, y: 0.93333346}
   m_EdgeRadius: 0
 --- !u!114 &1763403183039320973
 MonoBehaviour:
@@ -95,6 +95,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
+  doorUI: {fileID: 0}
+  chosenArrow: {fileID: 0}
+  chosenWeapon: {fileID: 0}
+  inventoryContent: {fileID: 0}
+  inventoryItemPrefab: {fileID: 0}
+  InventoryPanel: {fileID: 0}
+  shootCooldown: 0.5
+  arrowPrefabs: []
+  firePoint: {fileID: 0}
 --- !u!114 &507684364511438053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,6 +214,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -226,6 +237,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0

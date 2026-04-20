@@ -27,6 +27,17 @@ public class Reppu
         return true;
     }
 
+    public bool RemoveItem(Tavara item)
+    {
+        if (items.Remove(item))
+        {
+            currentWeight -= item.weight;
+            currentVolume -= item.volume;
+            return true;
+        }
+        return false;
+    }
+
     public List<Tavara> GetItems()
     {
         return items;

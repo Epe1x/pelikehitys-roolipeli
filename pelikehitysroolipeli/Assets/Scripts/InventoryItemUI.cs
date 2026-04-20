@@ -16,14 +16,14 @@ public class InventoryItemUI : MonoBehaviour
 
         itemText.text = item.itemName;
 
-        GetComponent<Button>().onClick.AddListener(UseItem);
+        Button button = GetComponent<Button>();
+
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(UseItem);
     }
 
     void UseItem()
     {
-        if (item.Use(player))
-        {
-            Debug.Log("Used " + item.itemName);
-        }
+        player.UseItem(item);
     }
 }

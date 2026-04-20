@@ -8,6 +8,8 @@ TagManager:
   - Merchant
   - Button
   - Item
+  - Ghost
+  - Crab
   layers:
   - Default
   - TransparentFX

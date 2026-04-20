@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
     [Header("Movement")]
     Vector2 lastMovement;
@@ -28,6 +28,11 @@ public class PlayerController : MonoBehaviour
     public GameObject inventoryItemPrefab;
     public GameObject InventoryPanel;
     Button inventoryButton;
+
+    float lastShotTime = 0;
+    public float shootCooldown = 0.5f;
+    public GameObject[] arrowPrefabs;
+    public Transform firePoint;
 
 
     void Start()
@@ -62,10 +67,22 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            mousePos.z = 0;
+
+            Vector2 direction = (mousePos - transform.position).normalized;
+
+            float distance = 0.5f;
+
+            firePoint.position = transform.position + (Vector3)(direction * distance);
+
+            ShootArrow(mousePos);
+        }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate()  
     {
         rb.MovePosition(rb.position + lastMovement * moveSpeed * Time.fixedDeltaTime);
     }
@@ -191,9 +208,14 @@ public class PlayerController : MonoBehaviour
         bool success = item.Use(this);
 
         if (success)
-            {
-                UpdateInventoryUI();
-            }
+    {
+        if (item is Ateria || item is Vesi)
+        {
+            playerReppu.RemoveItem(item);
+        }
+
+        UpdateInventoryUI();
+    }
     }
 
     public void UpdateInventoryUI()
@@ -212,5 +234,37 @@ public class PlayerController : MonoBehaviour
     public void ToggleInventory()
     {
         InventoryPanel.SetActive(!InventoryPanel.activeSelf);
+    }
+
+    public void ShootArrow(Vector3 target)
+    {
+        if (chosenArrow == null)
+        {
+            Debug.Log("No arrow selected!");
+            return;
+        }
+
+        int index = (int)chosenArrow.ArrowType;
+
+        GameObject arrowObj = Instantiate(
+            arrowPrefabs[index],
+            firePoint.position,
+            Quaternion.identity
+        );
+
+        ArrowController arrowController = arrowObj.GetComponent<ArrowController>();
+
+        Vector2 direction = (target - transform.position).normalized;
+        firePoint.right = direction;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        arrowObj.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        arrowController.Launch(direction);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        PlayerDataManager.Instance.RemoveHealth(amount);
     }
 }

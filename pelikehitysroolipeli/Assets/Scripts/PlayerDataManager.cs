@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class PlayerDataManager : MonoBehaviour
+public class PlayerDataManager : MonoBehaviour, IDamageable
 {
     public static PlayerDataManager Instance;
 
@@ -67,6 +67,11 @@ public class PlayerDataManager : MonoBehaviour
         money -= coinAmount;
         UpdateUI();
         return true;
+    }
+
+    public void TakeDamage(int amount)
+    {
+        RemoveHealth(amount);
     }
 
     void UpdateUI()
